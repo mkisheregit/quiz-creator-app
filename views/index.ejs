@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Create Quizzes'}) %>
+
+    <div class="container p-1 text-center">
+        <h1>Create Quizzes </h1>
+        <form action="/" method="post">
+            <input type="text" name="title" placeholder="--title of form/quiz--" class="form-control col-6 mx-auto" autocomplete="off" required>
+            <input type="text" name="description" placeholder="--description--" class="form-control  col-6 mx-auto" autocomplete="off">
+            <input type="date" name="expDate" class="form-control  col-2 mx-auto" required>
+            <button type="submit" name="button" value="save_title_button" class="btn btn-primary m-1"> save </button>
+        </form>
+        <br/>
+
+        <div class="p-1 text-center">
+            <% quizzesdb.forEach((eachquizdb,i)=>{
+       %>
+                <form class="d-block bg-primary m-1" action="/delete-quiz" method="post">
+                    <a href="/quizzes/<%=eachquizdb.title%>" class="btn btn-primary btn-lg col-sm-10 col-md-11 d-inline-block">
+                        <%= eachquizdb.title%>
+                    </a>
+                    <button type="submit" name="delete_quiz_button" class="btn btn-danger btn-lg d-inline col-sm-2 col-md-1 float-right" value=<%=eachquizdb._id %>>delete</button>
+                </form>
+                <%  })
+    %>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>

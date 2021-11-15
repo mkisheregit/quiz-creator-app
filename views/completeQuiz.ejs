@@ -1,0 +1,65 @@
+<%- include('partials/header', { title: 'Answer a Quiz'}) %>
+
+    <div class="container border border-secondary text-center">
+        <h1>Pick a quiz and answer </h1>
+        <div class="border p-1 text-center">
+            <% quizzesDB.forEach((eachquizdb,i)=>{
+          %>
+                <div>
+                    <button type="button" class="btn btn-primary col-12 d-block titleOfQuiz"><%= eachquizdb.title%> </button>
+                    <div class="contentOfQuiz">
+                        <!-- <h1 class="check"><%=quizzesDB[i].title  %></h1> -->
+                        <% if(today_time.getTime() <= eachquizdb.expDate.getTime()){ %>
+                            <h5 class="pt-2">
+                                <%=eachquizdb.description  %>
+                            </h5>
+                            <hr class="col-6" />
+                            <form action="/answer-quiz" method="post">
+                                <% quizzesDB[i].QandA.forEach((q,k)=>{ %>
+                                    <label class="d-block mt-4"><b class="rounded-circle border border-primary p-1"><%=k+1 %></b>&nbsp;<h4 ><%= q.ques  %></h4></label>
+                                    <% if(q.quesType=="MCQ"){ %>
+                                        <div class="options d-block">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="ans<%=k+1%>" value="<%=q.optionA%>">
+                                                <label class="form-check-label"><%= q.optionA %></label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="ans<%=k+1%>" value="<%= q.optionB%>">
+                                                <label class="form-check-label"><%= q.optionB %></label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="ans<%=k+1%>" value="<%= q.optionC%>">
+                                                <label class="form-check-label"><%= q.optionC %></label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="ans<%=k+1%>" value="<%= q.optionD%>">
+                                                <label class="form-check-label"><%= q.optionD %></label>
+                                            </div>
+                                            <% }
+            else{ %>
+                                                <input type="text" name="ans<%=k+1%>" class="form-control col-6 d-block mx-auto" placeholder="--your answer--">
+                                                <% } %>
+                                                    <%  }) %>
+                                                        <% if(eachquizdb.QandA.length>0){ %>
+                                                            <button type="submit" class="btn btn-primary mt-2 d-block mx-auto" name="submit_button" value=<%=eachquizdb._id%> > submit </button>
+                                                            <% } %>
+                                                                <hr/>
+                                        </div>
+                            </form>
+                            <% }
+         else{ %>
+                                <h1>Quiz has been expired </h1>
+                                <% } %>
+                    </div>
+                </div>
+                <%  })
+       %>
+        </div>
+    </div>
+    <script>
+        $(".contentOfQuiz").css("display", "none");
+        $(".titleOfQuiz").on("click", function() {
+            $(this).next().toggle();
+        });
+    </script>
+    <%- include('partials/footer') %>

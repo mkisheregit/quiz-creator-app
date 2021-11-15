@@ -1,0 +1,111 @@
+<%- include('partials/header', { title: 'add Q and A'}) %>
+
+    <div class="container p-1 text-center">
+        <h1>
+            <%= quizdb.title %>
+        </h1>
+        <h5>
+            <%= quizdb.description %>
+        </h5>
+
+        <form action="/quizzes/<%= quizdb.title %>" method="post">
+            <input type="text" name="ques" placeholder="--question--" class="form-control col-6 mx-auto" autocomplete="off" required>
+
+            <h5 class="pt-1">Question Type</h5>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="quesType" value="MCQ" id="MCQ" required>
+                <label class="form-check-label" for="MCQ">MCQ</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="quesType" value="notMCQ" id="notMCQ">
+                <label class="form-check-label" for="notMCQ">not MCQ</label>
+            </div>
+
+            <div class="options_group" id="options_group">
+                <div class="d-block">
+                    <input type="radio" name="ans" id="optionA1">
+                    <input type="text" name="optionA" placeholder="--option A--" class="form-control col-4 mx-auto d-inline" id="option1">
+                </div>
+                <div class="d-block">
+                    <input type="radio" name="ans" id="optionB2">
+                    <input type="text" name="optionB" placeholder="--option B--" class="form-control d-inline col-4 mx-auto" id="option2">
+                </div>
+                <div class="d-block">
+                    <input type="radio" name="ans" id="optionC3">
+                    <input type="text" name="optionC" placeholder="--option C--" class="form-control d-inline col-4 mx-auto" id="option3">
+                </div>
+                <div class="d-block">
+                    <input type="radio" name="ans" id="optionD4">
+                    <input type="text" name="optionD" placeholder="--option D--" class="form-control d-inline col-4 mx-auto" id="option4">
+                </div>
+            </div>
+            <input type="text" name="ans" placeholder="--answer--" class="form-control col-6 mx-auto" autocomplete="off" id="single_response">
+            <button type="submit" name="button" value="<%= quizdb._id %>" class="btn btn-primary m-1 d-block mx-auto"> save </button>
+        </form>
+
+    </div>
+    <div class="p-1 text-center">
+        <% quizdb.QandA.forEach((q,i)=>{ %>
+
+            <form action="/delete-item" method="post">
+                <h5><i>Ques&nbsp;<%= i+1 %></i> :&nbsp;&nbsp;<b><%= q.ques %></b></h5>
+                <h5><i>Ans :</i>&nbsp;&nbsp; <b><%= q.ans %></b></h5>
+                <% if(q.quesType==="MCQ"){ %>
+                    <h6 class="border-bottom col-2 mx-auto"> <i> Options </i> </h6>
+                    <h5 class="col-md-2 col-sm-6 mx-auto"><b class=" float-left">A.</b>
+                        <%= q.optionA %>
+                    </h5>
+                    <h5 class="col-md-2 col-sm-6  mx-auto"><b class=" float-left">B.</b>
+                        <%= q.optionB %>
+                    </h5>
+                    <h5 class="col-md-2 col-sm-6 mx-auto"><b class=" float-left">C.</b>
+                        <%= q.optionC %>
+                    </h5>
+                    <h5 class="col-md-2 col-sm-6 mx-auto"><b class=" float-left">D.</b>
+                        <%= q.optionD %>
+                    </h5>
+                    <% } %>
+                        <input type="hidden" name="quiz_id" value="<%=quizdb._id%>">
+                        <button onclick="submit" name="delete_button" value=<%=q._id%> class="btn btn-danger mb-2">delete</button>
+                        <hr class="col-8" />
+            </form>
+            <% }) %>
+    </div>
+
+    <script>
+        $("#options_group").css("display", "none");
+        $("#single_response").css("display", "none");
+
+        $("#MCQ").click(function() {
+            $("#options_group").show();
+            $("#single_response").hide();
+        });
+
+        $("#notMCQ").click(function() {
+            $("#single_response").show();
+            $("#options_group").hide();
+        });
+
+        $("#option1").on("change", function() {
+            $("#optionA1").val($(this).val());
+        });
+        console.log("value after clicking MCQ", $("#option1").val());
+
+        $("#option2").on("change", function() {
+            $("#optionB2").val($(this).val());
+        });
+
+        $("#option3").on("change", function() {
+            $("#optionC3").val($(this).val());
+        });
+
+        $("#option4").on("change", function() {
+            $("#optionD4").val($(this).val());
+        });
+
+        $('input[name="ans"][type="radio"]').on("click", function() {
+            console.log(JSON.stringify($(this).val()));
+        });
+    </script>
+
+    <%- include('partials/footer') %>
